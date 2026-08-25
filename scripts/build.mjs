@@ -63,7 +63,7 @@ function formatDate(iso) {
 function nav(currentSilo, currentPath) {
   const items = SILOS.map((s) => {
     const current = s.id === currentSilo || currentPath.startsWith(s.href);
-    return `<li><a href="${s.href}" ${current ? 'aria-current="page"' : ""}><span class="led" aria-hidden="true"></span>${esc(s.label)}</a></li>`;
+    return `<li><a href="${s.href}" ${current ? 'aria-current="page"' : ""}>${esc(s.label)}</a></li>`;
   }).join("");
   return `
     <ul class="silo-nav">
@@ -142,7 +142,7 @@ for (const page of pages) {
   const canonical = `${site.url}${page.path}`;
   const staged = page.path === "/" || page.shell === "stage";
   const body = staged ? page.body : `${breadcrumbs(page)}${page.body}`;
-  const content = staged ? body : `<div class="desk-sheet">${body}</div>`;
+  const content = staged ? body : `<div class="catalog">${body}</div>`;
   const html = layout
     .replaceAll("{{title}}", esc(page.title))
     .replaceAll("{{description}}", esc(page.description))
@@ -223,11 +223,8 @@ await writeFile(
 
 const skip = new Set([
   "/assets/styles.css",
-  "/assets/nav.js",
   "/assets/desk.js",
   "/assets/favicon.svg",
-  "/assets/og-default.svg",
-  "/assets/noise.svg",
   "/404.html",
 ]);
 const missing = [];

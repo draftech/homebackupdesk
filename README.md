@@ -2,7 +2,7 @@
 
 Static affiliate site for **home backup power**. Four silos, buyer-intent pages, Netlify-ready. Working brand and domain: **homebackupdesk.com** (do not buy it from this repo).
 
-Visual system: **night-outage / standby-power** — a dark house with one window lit, a transfer-switch as the silo map, and long copy on a lamp-lit worksheet. Custom motion (LED, handle throw, on-scroll reveals) is decorative. `prefers-reduced-motion` turns it off. Reading and buying are never behind a gate.
+Visual system: **print catalog / field guide**. Warm paper, thick rules, Barlow Condensed + Source Serif 4, photography as the layout. Photos live in `src/assets/photos/`.
 
 Out of scope: rooftop solar, Tesla Powerwall. Featured high-ticket offers: Jackery, Bluetti, Anker SOLIX (placeholder `/go/` hops — no invented click IDs). EcoFlow is not a featured partner (7-day cookie risk; we prefer ~30-day programs).
 
@@ -48,7 +48,7 @@ Until then, hops point at manufacturer homepages.
 ## URL tree (silos)
 
 ```
-/                                   Home (cinematic night stage)
+/                                   Home (catalog spread + photos)
 /about/
 /how-we-review/
 /disclosure/
