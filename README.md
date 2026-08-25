@@ -1,49 +1,54 @@
 # Home Backup Desk
 
-Static affiliate site for **home backup power** only. Four silos, buyer-intent pages, Netlify-ready. Working brand: Home Backup Desk.
+Static affiliate site for **home backup power**. Four silos, buyer-intent pages, Netlify-ready. Working brand and domain: **homebackupdesk.com** (do not buy it from this repo).
+
+Visual system: **night-outage / standby-power** — a dark house with one window lit, a transfer-switch as the silo map, and long copy on a lamp-lit worksheet. Custom motion (LED, handle throw, on-scroll reveals) is decorative. `prefers-reduced-motion` turns it off. Reading and buying are never behind a gate.
 
 Out of scope: rooftop solar, Tesla Powerwall. Featured high-ticket offers: Jackery, Bluetti, Anker SOLIX (placeholder `/go/` hops — no invented click IDs). EcoFlow is not a featured partner (7-day cookie risk; we prefer ~30-day programs).
 
-## Local run
+## Local run (Julio’s preview)
 
 Requires Node 18+.
+
+```bash
+npm start
+```
+
+That builds and serves `dist/` at [http://localhost:8080](http://localhost:8080). Or:
 
 ```bash
 npm run build
 python3 -m http.server 8080 --directory dist
 ```
 
-Open [http://localhost:8080](http://localhost:8080). `npm start` builds and serves in one step.
-
 There are no npm dependencies. `scripts/build.mjs` wraps `src/pages` in `src/templates/layout.html`, copies `src/assets`, writes `sitemap.xml` / `robots.txt`, and fails the build if an internal `href` is broken.
+
+Canonical URLs brand toward `https://homebackupdesk.com`. Until DNS exists, a Netlify default URL is the public host — update `src/site.json` `url` to the live origin after first deploy.
 
 ## Netlify deploy
 
-1. Fork or push this repo.
-2. In Netlify: **Add new site → Import an existing project** → this GitHub repo.
-3. Build command: `npm run build` (already in `netlify.toml`).
-4. Publish directory: `dist`.
-5. Deploy. The default `*.netlify.app` URL is fine until a custom domain exists. Do not buy a domain from this repo.
+1. Import this GitHub repo in Netlify.
+2. Build command: `npm run build` (already in `netlify.toml`).
+3. Publish directory: `dist`.
+4. Deploy. Default `*.netlify.app` is fine until the .com is connected later.
 
-`netlify.toml` also sets 302 redirects for `/go/jackery`, `/go/bluetti`, and `/go/anker-solix`, plus a 404 fallback.
-
-After the first deploy, set `url` in `src/site.json` to the live origin (Netlify URL or later custom domain) so canonical tags and `sitemap.xml` match production.
+`netlify.toml` sets 302 redirects for `/go/jackery`, `/go/bluetti`, and `/go/anker-solix`, plus a 404 fallback.
 
 ## Where to paste real affiliate IDs
 
 Do **not** invent click IDs. When a program is approved:
 
-1. Put the tracking URL in `src/affiliates.json` (`programs[].destination`) — used for local `/go/…/` HTML hops.
-2. Put the **same** URL in the matching `[[redirects]]` `to =` entries in `netlify.toml` — used in production (302, `force = true`).
-3. Keep the slugs stable (`/go/jackery/`, `/go/bluetti/`, `/go/anker-solix/`). In-article links use those paths, not raw network URLs.
-4. Never commit secrets, network passwords, or unpublished coupon codes.
+1. Put the tracking URL in `src/affiliates.json` (`programs[].destination`).
+2. Put the **same** URL in the matching `[[redirects]]` `to =` entries in `netlify.toml`.
+3. Keep slugs stable (`/go/jackery/`, `/go/bluetti/`, `/go/anker-solix/`).
+4. Never commit secrets or unpublished coupon codes.
 
-Until those destinations change, hops point at manufacturer homepages.
+Until then, hops point at manufacturer homepages.
 
 ## URL tree (silos)
 
 ```
-/                                   Home
+/                                   Home (cinematic night stage)
 /about/
 /how-we-review/
 /disclosure/

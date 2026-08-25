@@ -63,7 +63,7 @@ function formatDate(iso) {
 function nav(currentSilo, currentPath) {
   const items = SILOS.map((s) => {
     const current = s.id === currentSilo || currentPath.startsWith(s.href);
-    return `<li><a href="${s.href}" ${current ? 'aria-current="page"' : ""}>${esc(s.label)}</a></li>`;
+    return `<li><a href="${s.href}" ${current ? 'aria-current="page"' : ""}><span class="led" aria-hidden="true"></span>${esc(s.label)}</a></li>`;
   }).join("");
   return `
     <ul class="silo-nav">
@@ -140,6 +140,9 @@ const writtenPaths = new Set();
 
 for (const page of pages) {
   const canonical = `${site.url}${page.path}`;
+  const staged = page.path === "/" || page.shell === "stage";
+  const body = staged ? page.body : `${breadcrumbs(page)}${page.body}`;
+  const content = staged ? body : `<div class="desk-sheet">${body}</div>`;
   const html = layout
     .replaceAll("{{title}}", esc(page.title))
     .replaceAll("{{description}}", esc(page.description))
@@ -147,10 +150,9 @@ for (const page of pages) {
     .replaceAll("{{path}}", esc(page.path))
     .replaceAll("{{silo}}", esc(page.silo || "home"))
     .replaceAll("{{nav}}", nav(page.silo, page.path))
-    .replaceAll("{{breadcrumbs}}", breadcrumbs(page))
     .replaceAll("{{jsonld}}", jsonLd(page))
     .replaceAll("{{updated}}", esc(formatDate(page.updated || site.updated)))
-    .replaceAll("{{content}}", page.body)
+    .replaceAll("{{content}}", content)
     .replaceAll("{{site_name}}", esc(site.name))
     .replaceAll("{{site_url}}", esc(site.url));
 
@@ -161,7 +163,7 @@ for (const page of pages) {
   writtenPaths.add(page.path);
 
   for (const match of rendered.matchAll(/href="(\/[^"]*)"/g)) {
-    const href = match[1].split("#")[0];
+    const href = match[1].split("#")[0].split("?")[0];
     if (href) internalHrefs.add(href);
   }
 }
@@ -219,7 +221,15 @@ await writeFile(
   `User-agent: *\nAllow: /\nDisallow: /go/\nSitemap: ${site.url}/sitemap.xml\n`,
 );
 
-const skip = new Set(["/assets/styles.css", "/assets/nav.js", "/assets/favicon.svg", "/assets/og-default.svg", "/404.html"]);
+const skip = new Set([
+  "/assets/styles.css",
+  "/assets/nav.js",
+  "/assets/desk.js",
+  "/assets/favicon.svg",
+  "/assets/og-default.svg",
+  "/assets/noise.svg",
+  "/404.html",
+]);
 const missing = [];
 for (const href of internalHrefs) {
   if (skip.has(href) || href.startsWith("/assets/")) continue;
