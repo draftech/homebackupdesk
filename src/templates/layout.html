@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}} · {{site_name}}</title>
+  <meta name="description" content="{{description}}">
+  <link rel="canonical" href="{{canonical}}">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#243d32">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{site_name}}">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{description}}">
+  <meta property="og:url" content="{{canonical}}">
+  <meta property="og:image" content="{{site_url}}/assets/og-default.svg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{{title}}">
+  <meta name="twitter:description" content="{{description}}">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script type="application/ld+json">{{jsonld}}</script>
+</head>
+<body data-silo="{{silo}}" data-path="{{path}}">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="wordmark" href="/" aria-label="Home Backup Desk home">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="wordmark-text">
+          <strong>Home Backup Desk</strong>
+          <em>Home backup power, sorted</em>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        Menu
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Silos">
+        {{nav}}
+        <ul class="meta-nav">
+          <li><a href="/how-we-review/">How we review</a></li>
+          <li><a href="/disclosure/">Affiliate disclosure</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <p class="disclosure-strip">
+    We may earn a commission from links to Jackery, Bluetti, and Anker SOLIX. It does not change the price you pay.
+    <a href="/disclosure/">Full disclosure</a>
+  </p>
+  <main id="main">
+    {{breadcrumbs}}
+    {{content}}
+  </main>
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-brand">Home Backup Desk</p>
+        <p>One topical cluster: home backup power. Four silos. No rooftop solar. No Tesla Powerwall.</p>
+        <p class="fineprint">Educational comparison, not electrical, permitting, or fire-code advice. Confirm specs and local code before you buy or install.</p>
+      </div>
+      <nav aria-label="Silo index">
+        <h2>Silos</h2>
+        <ul>
+          <li><a href="/whole-house-generators/">Whole-house generators</a></li>
+          <li><a href="/home-batteries/">Home batteries</a></li>
+          <li><a href="/portable-power-stations/">Portable power stations</a></li>
+          <li><a href="/portable-solar-panels/">Portable solar panels</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="About">
+        <h2>About</h2>
+        <ul>
+          <li><a href="/about/">About the desk</a></li>
+          <li><a href="/how-we-review/">How we review</a></li>
+          <li><a href="/disclosure/">Affiliate disclosure</a></li>
+          <li><a href="/privacy/">Privacy</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="updated">Pages reviewed {{updated}}. Affiliate hop URLs are placeholders until programs are live.</p>
+  </footer>
+  <script src="/assets/nav.js" defer></script>
+</body>
+</html>

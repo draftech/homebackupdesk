@@ -1,0 +1,62 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Affiliate hops: swap `to` with real tracking URLs in this file (and src/affiliates.json).
+# Keep `from` slugs stable. 302 so you can change destinations later without caching 301s.
+[[redirects]]
+  from = "/go/jackery"
+  to = "https://www.jackery.com/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/go/jackery/"
+  to = "https://www.jackery.com/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/go/bluetti"
+  to = "https://www.bluettipower.com/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/go/bluetti/"
+  to = "https://www.bluettipower.com/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/go/anker-solix"
+  to = "https://www.ankersolix.com/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/go/anker-solix/"
+  to = "https://www.ankersolix.com/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
