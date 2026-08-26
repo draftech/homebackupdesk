@@ -1,6 +1,6 @@
 {
   "_comment": "Replace destination URLs with real affiliate links when programs are approved. Keep the /go/ slugs stable so in-content links do not change. Do not commit click IDs that you do not actually have.",
-  "cookiePreference": "Prefer 30-day cookie programs. EcoFlow is optional and often cited with a 7-day cookie, so it is not a featured partner.",
+  "cookiePreference": "Prefer 30-day cookie programs (Jackery, BLUETTI, Anker SOLIX). EcoFlow is a featured hop with a shorter cookie, often cited as 7 days — disclose that, do not treat it as a ban.",
   "programs": [
     {
       "id": "jackery",
@@ -28,6 +28,15 @@
       "destination": "https://www.ankersolix.com/",
       "typicalCookieDays": 30,
       "notes": "Paste Anker SOLIX/Impact tracking URL here."
+    },
+    {
+      "id": "ecoflow",
+      "name": "EcoFlow",
+      "slug": "ecoflow",
+      "path": "/go/ecoflow/",
+      "destination": "https://www.ecoflow.com/us/",
+      "typicalCookieDays": 7,
+      "notes": "Placeholder to the official EcoFlow US homepage only. Do not invent an Impact click ID. Disclose the shorter cookie."
     }
   ]
 }
