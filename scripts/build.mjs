@@ -261,6 +261,7 @@ function stickyBar(kind) {
       const p = product(id);
       return `<a class="cta cta-compact" href="${hopById[p.affiliate]}">${esc(p.brand)}</a>`;
     })
+    .concat(hopById.ecoflow ? [`<a class="cta cta-compact" href="${hopById.ecoflow}">EcoFlow</a>`] : [])
     .join("");
   return `<div class="sticky-cta" hidden>
     <p>Shop featured ${kind === "panels" ? "panels" : "stations"}</p>

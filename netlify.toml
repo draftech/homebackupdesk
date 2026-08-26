@@ -48,6 +48,18 @@
   force = true
 
 [[redirects]]
+  from = "/go/ecoflow"
+  to = "https://www.ecoflow.com/us/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/go/ecoflow/"
+  to = "https://www.ecoflow.com/us/"
+  status = 302
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/404.html"
   status = 404

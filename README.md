@@ -4,7 +4,7 @@ Static affiliate site for **home backup power**. Four silos, buyer-intent pages,
 
 Named Jackery, BLUETTI, and Anker SOLIX SKUs use **official manufacturer product photographs** committed in `src/assets/products/` (sources in `src/products.json`). Lifestyle photos in `src/assets/photos/` are documentary scenes only — they never stand in for a product shot.
 
-Out of scope: rooftop solar, Tesla Powerwall. Featured high-ticket offers: Jackery, BLUETTI, Anker SOLIX (placeholder `/go/` hops — no invented click IDs). EcoFlow is not a featured partner (7-day cookie risk; we prefer ~30-day programs).
+Out of scope: rooftop solar, Tesla Powerwall. Featured high-ticket offers: Jackery, BLUETTI, Anker SOLIX, and EcoFlow (placeholder `/go/` hops — no invented click IDs). We prefer ~30-day cookie programs; EcoFlow is listed with a shorter cookie (often cited as 7 days) disclosed.
 
 ## Local run
 
@@ -32,7 +32,7 @@ Canonical URLs brand toward `https://thehomebackup.com`. Until DNS exists, a Net
 3. Publish directory: `dist`.
 4. Deploy. Default `*.netlify.app` is fine until the .com is connected later.
 
-`netlify.toml` sets 302 redirects for `/go/jackery`, `/go/bluetti`, and `/go/anker-solix`, plus a 404 fallback.
+`netlify.toml` sets 302 redirects for `/go/jackery`, `/go/bluetti`, `/go/anker-solix`, and `/go/ecoflow`, plus a 404 fallback. `/go/ecoflow` is a placeholder to the official EcoFlow US homepage only.
 
 ## Where to paste real affiliate IDs
 
@@ -40,7 +40,7 @@ Do **not** invent click IDs. When a program is approved:
 
 1. Put the tracking URL in `src/affiliates.json` (`programs[].destination`).
 2. Put the **same** URL in the matching `[[redirects]]` `to =` entries in `netlify.toml`.
-3. Keep slugs stable (`/go/jackery/`, `/go/bluetti/`, `/go/anker-solix/`).
+3. Keep slugs stable (`/go/jackery/`, `/go/bluetti/`, `/go/anker-solix/`, `/go/ecoflow/`).
 4. Never commit secrets or unpublished coupon codes.
 
 Until then, hops point at manufacturer homepages.
@@ -87,6 +87,7 @@ Until then, hops point at manufacturer homepages.
 /go/jackery/                        Placeholder affiliate hop
 /go/bluetti/
 /go/anker-solix/
+/go/ecoflow/                        Placeholder to EcoFlow US homepage (no invented click ID)
 ```
 
 Standby-generator pages are informational. Jackery / BLUETTI / Anker SOLIX do not sell traditional pad plants; we do not fake a Generac (or similar) affiliate ID.
