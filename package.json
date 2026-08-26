@@ -1,0 +1,13 @@
+{
+  "name": "homebackupdesk",
+  "private": true,
+  "description": "The Home Backup — static affiliate site for home backup power",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "start": "node scripts/build.mjs && python3 -m http.server 8080 --directory dist"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

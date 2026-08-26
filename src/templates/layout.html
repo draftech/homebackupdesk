@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}} · {{site_name}}</title>
+  <meta name="description" content="{{description}}">
+  <link rel="canonical" href="{{canonical}}">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#f4efe6">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{site_name}}">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{description}}">
+  <meta property="og:url" content="{{canonical}}">
+  <meta property="og:image" content="{{site_url}}/assets/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{title}}">
+  <meta name="twitter:description" content="{{description}}">
+  <meta name="twitter:image" content="{{site_url}}/assets/og.jpg">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600;6..72,700&amp;family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap">
+  <link rel="stylesheet" href="/assets/styles.css?v=studio4">
+  <script type="application/ld+json">{{jsonld}}</script>
+</head>
+<body data-silo="{{silo}}" data-path="{{path}}">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="wordmark" href="/" aria-label="The Home Backup">
+        <img class="mark" src="/assets/favicon.svg" width="44" height="44" alt="">
+        <span class="wordmark-type">
+          <span class="wordmark-name">The Home</span>
+          <span class="wordmark-desk">Backup</span>
+        </span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav id="site-nav" class="site-nav" aria-label="Silos">
+        {{nav}}
+        <ul class="meta-nav">
+          <li><a href="/how-we-review/">Method</a></li>
+          <li><a href="/disclosure/">Disclosure</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <p class="disclosure-strip">
+    Commission possible from Jackery, BLUETTI, and Anker SOLIX links. Same price to you.
+    <a href="/disclosure/">Disclosure</a>
+  </p>
+  <main id="main">
+    {{content}}
+  </main>
+  {{sticky}}
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-brand">The Home Backup</p>
+        <p>thehomebackup.com. Four silos. No rooftop solar. No Tesla Powerwall.</p>
+        <p class="fineprint">Not electrical, permitting, or fire-code advice. Confirm live specs before you buy. Domain is a working brand; do not purchase it from this repository.</p>
+      </div>
+      <nav aria-label="Silo index">
+        <h2>Silos</h2>
+        <ul>
+          <li><a href="/whole-house-generators/">Whole-house generators</a></li>
+          <li><a href="/home-batteries/">Home batteries</a></li>
+          <li><a href="/portable-power-stations/">Portable power stations</a></li>
+          <li><a href="/portable-solar-panels/">Portable solar panels</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="About">
+        <h2>The desk</h2>
+        <ul>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/contact/">Contact</a></li>
+          <li><a href="/how-we-review/">How we review</a></li>
+          <li><a href="/disclosure/">Affiliate disclosure</a></li>
+          <li><a href="/privacy/">Privacy</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="updated">Reviewed {{updated}}. Affiliate hops are placeholders until programs are live.</p>
+  </footer>
+  <script src="/assets/desk.js?v=studio4" defer></script>
+</body>
+</html>
