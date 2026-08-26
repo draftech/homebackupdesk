@@ -2,11 +2,11 @@
 
 Static affiliate site for **home backup power**. Four silos, buyer-intent pages, Netlify-ready. Working brand and domain: **homebackupdesk.com** (do not buy it from this repo).
 
-Visual system: **print catalog / field guide**. Warm paper, thick rules, Barlow Condensed + Source Serif 4, photography as the layout. Photos live in `src/assets/photos/`.
+Named Jackery, BLUETTI, and Anker SOLIX SKUs use **official manufacturer product photographs** committed in `src/assets/products/` (sources in `src/products.json`). Lifestyle photos in `src/assets/photos/` are documentary scenes only — they never stand in for a product shot.
 
-Out of scope: rooftop solar, Tesla Powerwall. Featured high-ticket offers: Jackery, Bluetti, Anker SOLIX (placeholder `/go/` hops — no invented click IDs). EcoFlow is not a featured partner (7-day cookie risk; we prefer ~30-day programs).
+Out of scope: rooftop solar, Tesla Powerwall. Featured high-ticket offers: Jackery, BLUETTI, Anker SOLIX (placeholder `/go/` hops — no invented click IDs). EcoFlow is not a featured partner (7-day cookie risk; we prefer ~30-day programs).
 
-## Local run (Julio’s preview)
+## Local run
 
 Requires Node 18+.
 
@@ -21,7 +21,7 @@ npm run build
 python3 -m http.server 8080 --directory dist
 ```
 
-There are no npm dependencies. `scripts/build.mjs` wraps `src/pages` in `src/templates/layout.html`, copies `src/assets`, writes `sitemap.xml` / `robots.txt`, and fails the build if an internal `href` is broken.
+There are no npm dependencies. `scripts/build.mjs` wraps `src/pages` in `src/templates/layout.html`, expands product cards from `src/products.json`, copies `src/assets`, writes `sitemap.xml` / `robots.txt`, and fails the build if an internal `href` is broken.
 
 Canonical URLs brand toward `https://homebackupdesk.com`. Until DNS exists, a Netlify default URL is the public host — update `src/site.json` `url` to the live origin after first deploy.
 
@@ -48,7 +48,7 @@ Until then, hops point at manufacturer homepages.
 ## URL tree (silos)
 
 ```
-/                                   Home (catalog spread + photos)
+/                                   Home
 /about/
 /how-we-review/
 /disclosure/
@@ -81,8 +81,8 @@ Until then, hops point at manufacturer homepages.
 /go/anker-solix/
 ```
 
-Standby-generator pages are informational. Jackery / Bluetti / Anker SOLIX do not sell traditional pad plants; we do not fake a Generac (or similar) affiliate ID.
+Standby-generator pages are informational. Jackery / BLUETTI / Anker SOLIX do not sell traditional pad plants; we do not fake a Generac (or similar) affiliate ID.
 
 ## License
 
-Original copy in this repository is for Home Backup Desk. Manufacturer names are trademarks of their owners.
+Original copy in this repository is for Home Backup Desk. Manufacturer names are trademarks of their owners. Product photographs are downloaded from manufacturer sites for identification; rights remain with those manufacturers.

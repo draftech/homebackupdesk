@@ -1,5 +1,5 @@
 import { mkdir, readdir, readFile, writeFile, copyFile, stat } from "node:fs/promises";
-import { dirname, join, relative, extname } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -9,14 +9,17 @@ const pagesDir = join(srcDir, "pages");
 
 const site = JSON.parse(await readFile(join(srcDir, "site.json"), "utf8"));
 const affiliates = JSON.parse(await readFile(join(srcDir, "affiliates.json"), "utf8"));
+const catalog = JSON.parse(await readFile(join(srcDir, "products.json"), "utf8"));
 const layout = await readFile(join(srcDir, "templates/layout.html"), "utf8");
 
 const SILOS = [
-  { id: "whole-house-generators", href: "/whole-house-generators/", label: "Whole-house generators" },
+  { id: "whole-house-generators", href: "/whole-house-generators/", label: "Generators" },
   { id: "home-batteries", href: "/home-batteries/", label: "Home batteries" },
   { id: "portable-power-stations", href: "/portable-power-stations/", label: "Power stations" },
-  { id: "portable-solar-panels", href: "/portable-solar-panels/", label: "Portable solar panels" },
+  { id: "portable-solar-panels", href: "/portable-solar-panels/", label: "Solar panels" },
 ];
+
+const hopById = Object.fromEntries(affiliates.programs.map((p) => [p.id, p.path]));
 
 async function walk(dir) {
   const out = [];
@@ -65,10 +68,7 @@ function nav(currentSilo, currentPath) {
     const current = s.id === currentSilo || currentPath.startsWith(s.href);
     return `<li><a href="${s.href}" ${current ? 'aria-current="page"' : ""}>${esc(s.label)}</a></li>`;
   }).join("");
-  return `
-    <ul class="silo-nav">
-      ${items}
-    </ul>`;
+  return `<ul class="silo-nav">${items}</ul>`;
 }
 
 function jsonLd(page) {
@@ -81,6 +81,7 @@ function jsonLd(page) {
       name: site.name,
       url: site.url,
       description: site.description,
+      logo: `${site.url}/assets/apple-touch-icon.png`,
     },
     {
       "@type": "WebSite",
@@ -119,12 +120,165 @@ function breadcrumbs(page) {
   return `<nav class="crumbs" aria-label="Breadcrumb"><ol>${lis}</ol></nav>`;
 }
 
-function injectGoLinks(html) {
-  return html.replace(/\{\{go:([a-z0-9-]+)\}\}/g, (_, id) => {
-    const program = affiliates.programs.find((p) => p.id === id);
-    if (!program) throw new Error(`Unknown affiliate id: ${id}`);
-    return program.path;
-  });
+function product(id) {
+  const p = catalog.items[id];
+  if (!p) throw new Error(`Unknown product id: ${id}`);
+  return p;
+}
+
+function productsIn(group) {
+  return Object.values(catalog.items).filter((p) => p.group === group);
+}
+
+function specRows(p) {
+  if (p.group === "panels") {
+    return [
+      ["Nameplate", p.watts],
+      ["Voc", p.voc],
+      ["Weight", p.weight],
+      ["Rating", p.ip],
+    ];
+  }
+  return [
+    ["Capacity", p.capacity],
+    ["Output", p.output],
+    ["Surge / peak", p.surge],
+    ["Voltage", p.voltage],
+    ["Weight", p.weight],
+    ["Expandable", p.expandable],
+  ];
+}
+
+function priceBlock(p) {
+  if (p.price) {
+    const was = p.compareAt ? ` <s>${esc(p.compareAt)}</s>` : "";
+    return `<p class="product-price">${esc(p.price)}${was}</p>
+      <p class="product-price-note">Street price on the manufacturer page, ${esc(formatDate(catalog.asOf))}. Sales move.</p>`;
+  }
+  return `<p class="product-price-note">No street price on the manufacturer page we checked ${esc(formatDate(catalog.asOf))}.</p>`;
+}
+
+function productCard(p) {
+  const hop = hopById[p.affiliate];
+  const specs = specRows(p)
+    .filter(([, v]) => v)
+    .slice(0, 4)
+    .map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`)
+    .join("");
+  return `<article class="product-card">
+    <a class="product-media" href="${hop}">
+      <img src="${esc(p.image)}" width="800" height="800" alt="${esc(p.alt)}">
+    </a>
+    <div class="product-body">
+      <p class="product-brand">${esc(p.brand)}</p>
+      <h3>${esc(p.name)}</h3>
+      ${p.job ? `<p class="product-job">${esc(p.job)}</p>` : ""}
+      <dl class="product-specs">${specs}</dl>
+      ${priceBlock(p)}
+      <a class="cta" href="${hop}">${esc(p.cta)}</a>
+    </div>
+  </article>`;
+}
+
+function productGrid(group) {
+  const items = productsIn(group);
+  return `<div class="product-grid">${items.map(productCard).join("\n")}</div>
+    <p class="source-note">Photos are official manufacturer product shots. Specs and street prices from the linked product pages, ${esc(formatDate(catalog.asOf))}. Blank cells were not stated clearly on those pages.</p>`;
+}
+
+function compareTable(group) {
+  const items = productsIn(group);
+  const isPanels = group === "panels";
+  const cols = isPanels
+    ? [
+        ["Watts", "watts"],
+        ["Voc", "voc"],
+        ["Weight", "weight"],
+        ["IP", "ip"],
+        ["Street price", "price"],
+      ]
+    : [
+        ["Capacity", "capacity"],
+        ["Output", "output"],
+        ["Surge / peak", "surge"],
+        ["Voltage", "voltage"],
+        ["Weight", "weight"],
+        ["Street price", "price"],
+      ];
+  const head = `<tr><th scope="col">SKU</th>${cols.map(([label]) => `<th scope="col">${esc(label)}</th>`).join("")}<th scope="col">Buy</th></tr>`;
+  const body = items
+    .map((p) => {
+      const hop = hopById[p.affiliate];
+      const cells = cols
+        .map(([, key]) => {
+          const val = p[key] || "—";
+          return `<td>${val === "—" ? "—" : esc(val)}</td>`;
+        })
+        .join("");
+      return `<tr>
+        <th scope="row">
+          <a class="sku-cell" href="${hop}">
+            <img src="${esc(p.image)}" width="72" height="72" alt="${esc(p.alt)}">
+            <span>${esc(p.fullName)}</span>
+          </a>
+        </th>
+        ${cells}
+        <td><a class="cta cta-compact" href="${hop}">${esc(p.cta)}</a></td>
+      </tr>`;
+    })
+    .join("\n");
+  const caption = isPanels
+    ? `Portable panels — manufacturer pages, ${formatDate(catalog.asOf)}. Em dash means the spec was not clearly listed.`
+    : `Named stations — manufacturer pages, ${formatDate(catalog.asOf)}. Em dash means the spec was not clearly listed.`;
+  return `<div class="table-wrap" tabindex="0" role="region" aria-label="Comparison">
+    <table class="compare">
+      <caption>${esc(caption)}</caption>
+      <thead>${head}</thead>
+      <tbody>${body}</tbody>
+    </table>
+  </div>`;
+}
+
+function skuFigure(p) {
+  const hop = hopById[p.affiliate];
+  return `<figure class="sku-figure">
+    <a href="${hop}"><img src="${esc(p.image)}" width="800" height="800" alt="${esc(p.alt)}"></a>
+    <figcaption>${esc(p.fullName)}. Official manufacturer photo. <a href="${hop}">${esc(p.cta)}</a></figcaption>
+  </figure>`;
+}
+
+function stickyBar(kind) {
+  if (!kind) return "";
+  const map = {
+    stations: ["jackery-explorer-2000-plus", "bluetti-ac200l", "anker-solix-c2000-gen2"],
+    home: ["anker-solix-f3800", "bluetti-ac200l", "jackery-explorer-2000-plus"],
+    panels: ["jackery-solarsaga-200w", "bluetti-sp200l", "anker-solix-ps400"],
+  };
+  const ids = map[kind];
+  if (!ids) return "";
+  const links = ids
+    .map((id) => {
+      const p = product(id);
+      return `<a class="cta cta-compact" href="${hopById[p.affiliate]}">${esc(p.brand)}</a>`;
+    })
+    .join("");
+  return `<div class="sticky-cta" hidden>
+    <p>Shop featured ${kind === "panels" ? "panels" : "stations"}</p>
+    <div class="sticky-cta-row">${links}</div>
+  </div>`;
+}
+
+function injectTokens(html) {
+  return html
+    .replace(/\{\{product:([a-z0-9-]+)\}\}/g, (_, id) => productCard(product(id)))
+    .replace(/\{\{sku:([a-z0-9-]+)\}\}/g, (_, id) => skuFigure(product(id)))
+    .replace(/\{\{products:([a-z0-9-]+)\}\}/g, (_, group) => productGrid(group))
+    .replace(/\{\{compare:([a-z0-9-]+)\}\}/g, (_, group) => compareTable(group))
+    .replace(/\{\{go:([a-z0-9-]+)\}\}/g, (_, id) => {
+      const program = affiliates.programs.find((p) => p.id === id);
+      if (!program) throw new Error(`Unknown affiliate id: ${id}`);
+      return program.path;
+    });
 }
 
 const pageFiles = (await walk(pagesDir)).filter((f) => f.endsWith(".html"));
@@ -142,7 +296,7 @@ for (const page of pages) {
   const canonical = `${site.url}${page.path}`;
   const staged = page.path === "/" || page.shell === "stage";
   const body = staged ? page.body : `${breadcrumbs(page)}${page.body}`;
-  const content = staged ? body : `<div class="catalog">${body}</div>`;
+  const content = staged ? body : `<div class="page">${body}</div>`;
   const html = layout
     .replaceAll("{{title}}", esc(page.title))
     .replaceAll("{{description}}", esc(page.description))
@@ -153,10 +307,11 @@ for (const page of pages) {
     .replaceAll("{{jsonld}}", jsonLd(page))
     .replaceAll("{{updated}}", esc(formatDate(page.updated || site.updated)))
     .replaceAll("{{content}}", content)
+    .replaceAll("{{sticky}}", stickyBar(page.sticky))
     .replaceAll("{{site_name}}", esc(site.name))
     .replaceAll("{{site_url}}", esc(site.url));
 
-  const rendered = injectGoLinks(html);
+  const rendered = injectTokens(html);
   const outFile = page.path === "/" ? join(distDir, "index.html") : join(distDir, page.path.replace(/^\//, ""), "index.html");
   await mkdir(dirname(outFile), { recursive: true });
   await writeFile(outFile, rendered);
@@ -221,12 +376,7 @@ await writeFile(
   `User-agent: *\nAllow: /\nDisallow: /go/\nSitemap: ${site.url}/sitemap.xml\n`,
 );
 
-const skip = new Set([
-  "/assets/styles.css",
-  "/assets/desk.js",
-  "/assets/favicon.svg",
-  "/404.html",
-]);
+const skip = new Set(["/404.html"]);
 const missing = [];
 for (const href of internalHrefs) {
   if (skip.has(href) || href.startsWith("/assets/")) continue;
@@ -246,4 +396,5 @@ if (missing.length) {
 }
 
 console.log(`Built ${pages.length} pages → dist/`);
+console.log(`Products: ${Object.keys(catalog.items).join(", ")}`);
 console.log(`Affiliate hops: ${affiliates.programs.map((p) => p.path).join(", ")}`);
