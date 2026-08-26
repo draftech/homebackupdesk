@@ -52,6 +52,20 @@
   to = "/404.html"
   status = 404
 
+# Serve the static sitemap/robots files from dist/ as documents, not HTML.
+# Avoids Netlify post-processing treating /sitemap.xml as a page (which 500s).
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml; charset=UTF-8"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=UTF-8"
+    X-Content-Type-Options = "nosniff"
+
 [[headers]]
   for = "/*"
   [headers.values]

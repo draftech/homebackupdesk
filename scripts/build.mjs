@@ -1,6 +1,10 @@
+import { execFile } from "node:child_process";
 import { mkdir, readdir, readFile, writeFile, copyFile, stat, rm } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
+
+const execFileP = promisify(execFile);
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const srcDir = join(root, "src");
@@ -363,19 +367,93 @@ for (const program of affiliates.programs) {
   writtenPaths.add(program.path);
 }
 
-const sitemapUrls = pages
-  .filter((p) => p.path !== "/404/")
-  .map((p) => `  <url><loc>${esc(site.url + p.path)}</loc><lastmod>${esc(p.updated || site.updated)}</lastmod></url>`)
-  .join("\n");
-await writeFile(
-  join(distDir, "sitemap.xml"),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls}\n</urlset>\n`,
-);
+function isPublicSitemapPage(page) {
+  const path = page.path || "";
+  if (path === "/404/" || path === "/404.html") return false;
+  if (path.startsWith("/go/")) return false;
+  if (path.includes("?") || path.includes("#")) return false;
+  return true;
+}
 
-await writeFile(
-  join(distDir, "robots.txt"),
-  `User-agent: *\nAllow: /\nDisallow: /go/\nSitemap: ${site.url}/sitemap.xml\n`,
-);
+const sitemapPages = pages
+  .filter(isPublicSitemapPage)
+  .sort((a, b) => {
+    if (a.path === "/") return -1;
+    if (b.path === "/") return 1;
+    return a.path.localeCompare(b.path);
+  });
+
+const sitemapEntries = sitemapPages.map((p) => {
+  const loc = `${site.url}${p.path}`;
+  if (!loc.startsWith("https://thehomebackup.com")) {
+    throw new Error(`Sitemap loc must use https://thehomebackup.com, got ${loc}`);
+  }
+  if (loc.includes("netlify.app") || loc.includes("/go/") || loc.includes("?")) {
+    throw new Error(`Sitemap loc is not a public page URL: ${loc}`);
+  }
+  return { loc, lastmod: p.updated || site.updated };
+});
+
+if (!sitemapEntries.some((e) => e.loc === `${site.url}/`)) {
+  throw new Error("Sitemap is missing the homepage");
+}
+
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapEntries
+  .map(
+    (e) => `  <url>
+    <loc>${esc(e.loc)}</loc>
+    <lastmod>${esc(e.lastmod)}</lastmod>
+  </url>`,
+  )
+  .join("\n")}
+</urlset>
+`;
+
+if (!sitemapXml.startsWith('<?xml version="1.0" encoding="UTF-8"?>')) {
+  throw new Error("sitemap.xml missing XML declaration");
+}
+if (!sitemapXml.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')) {
+  throw new Error("sitemap.xml missing urlset");
+}
+if (sitemapEntries.some((e) => e.loc.includes("/go/") || e.loc.includes("netlify.app") || e.loc.includes("?"))) {
+  throw new Error("sitemap.xml includes a hop, preview host, or query string");
+}
+for (const entry of sitemapEntries) {
+  if (!sitemapXml.includes(`<loc>${esc(entry.loc)}</loc>`)) {
+    throw new Error(`sitemap.xml missing ${entry.loc}`);
+  }
+}
+
+const sitemapFile = join(distDir, "sitemap.xml");
+await writeFile(sitemapFile, sitemapXml);
+await copyFile(join(srcDir, "robots.txt"), join(distDir, "robots.txt"));
+
+try {
+  await execFileP("python3", [
+    "-c",
+    "import sys, xml.etree.ElementTree as ET\n" +
+      "tree = ET.parse(sys.argv[1])\n" +
+      "root = tree.getroot()\n" +
+      "ns = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}\n" +
+      "urls = root.findall('sm:url', ns)\n" +
+      "if not urls: raise SystemExit('sitemap has no url entries')\n" +
+      "for url in urls:\n" +
+      "    loc = url.find('sm:loc', ns)\n" +
+      "    lastmod = url.find('sm:lastmod', ns)\n" +
+      "    if loc is None or not (loc.text or '').strip(): raise SystemExit('url missing loc')\n" +
+      "    if lastmod is None or not (lastmod.text or '').strip(): raise SystemExit('url missing lastmod')\n",
+    sitemapFile,
+  ]);
+} catch (err) {
+  if (err.code === "ENOENT") {
+    console.warn("python3 not found; skipped XML parse check");
+  } else {
+    const detail = err.stderr || err.stdout || err.message;
+    throw new Error(`sitemap.xml is not well-formed XML: ${detail}`);
+  }
+}
 
 const skip = new Set(["/404.html"]);
 const missing = [];
@@ -397,5 +475,7 @@ if (missing.length) {
 }
 
 console.log(`Built ${pages.length} pages → dist/`);
+console.log(`Sitemap: ${sitemapEntries.length} public URLs → dist/sitemap.xml`);
+console.log(`Robots: copied src/robots.txt → dist/robots.txt`);
 console.log(`Products: ${Object.keys(catalog.items).join(", ")}`);
 console.log(`Affiliate hops: ${affiliates.programs.map((p) => p.path).join(", ")}`);
