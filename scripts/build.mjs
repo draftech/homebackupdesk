@@ -427,8 +427,23 @@ for (const entry of sitemapEntries) {
 }
 
 const sitemapFile = join(distDir, "sitemap.xml");
+const seoDir = join(distDir, "seo");
+await mkdir(seoDir, { recursive: true });
 await writeFile(sitemapFile, sitemapXml);
+await writeFile(join(seoDir, "sitemap.xml"), sitemapXml);
 await copyFile(join(srcDir, "robots.txt"), join(distDir, "robots.txt"));
+await writeFile(join(distDir, "_redirects"), "/sitemap.xml  /seo/sitemap.xml  200!\n");
+await writeFile(
+  join(distDir, "_headers"),
+  `/sitemap.xml
+  Content-Type: application/xml; charset=UTF-8
+  X-Content-Type-Options: nosniff
+
+/seo/sitemap.xml
+  Content-Type: application/xml; charset=UTF-8
+  X-Content-Type-Options: nosniff
+`,
+);
 
 try {
   await execFileP("python3", [

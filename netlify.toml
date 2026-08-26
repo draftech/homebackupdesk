@@ -9,6 +9,19 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Snippet injection / pretty-URL post-processing can 500 on sitemap.xml
+# (robots.txt is text/plain and is skipped). Serve files as published.
+[build.processing]
+  skip_processing = true
+
+# Static sitemap from dist/seo/sitemap.xml. force=true so this rewrite
+# wins over a splat 404 or any Netlify sitemap plugin on /sitemap.xml.
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/seo/sitemap.xml"
+  status = 200
+  force = true
+
 # Affiliate hops: swap `to` with real tracking URLs in this file (and src/affiliates.json).
 # Keep `from` slugs stable. 302 so you can change destinations later without caching 301s.
 [[redirects]]
@@ -47,15 +60,16 @@
   status = 302
   force = true
 
-[[redirects]]
-  from = "/*"
-  to = "/404.html"
-  status = 404
-
-# Serve the static sitemap/robots files from dist/ as documents, not HTML.
-# Avoids Netlify post-processing treating /sitemap.xml as a page (which 500s).
+# Unknown paths use dist/404.html automatically. Do not splat /* to 404 —
+# that rule can 500 /sitemap.xml when shadowing misses XML.
 [[headers]]
   for = "/sitemap.xml"
+  [headers.values]
+    Content-Type = "application/xml; charset=UTF-8"
+    X-Content-Type-Options = "nosniff"
+
+[[headers]]
+  for = "/seo/sitemap.xml"
   [headers.values]
     Content-Type = "application/xml; charset=UTF-8"
     X-Content-Type-Options = "nosniff"
