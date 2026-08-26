@@ -1,3 +1,7 @@
+# Working production host we brand toward: https://thehomebackup.com
+# Domain is not purchased from this repo — connect it in the Netlify UI later.
+# Canonical URLs are emitted from src/site.json (`url`).
+
 [build]
   command = "npm run build"
   publish = "dist"
