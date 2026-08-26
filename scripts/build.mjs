@@ -1,4 +1,4 @@
-import { mkdir, readdir, readFile, writeFile, copyFile, stat } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile, copyFile, stat, rm } from "node:fs/promises";
 import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -287,6 +287,7 @@ for (const file of pageFiles) {
   pages.push(parsePage(await readFile(file, "utf8"), file));
 }
 
+await rm(distDir, { recursive: true, force: true });
 await mkdir(distDir, { recursive: true });
 
 const internalHrefs = new Set();
