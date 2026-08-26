@@ -426,20 +426,20 @@ for (const entry of sitemapEntries) {
   }
 }
 
-const sitemapFile = join(distDir, "sitemap.xml");
-const seoDir = join(distDir, "seo");
-await mkdir(seoDir, { recursive: true });
-await writeFile(sitemapFile, sitemapXml);
-await writeFile(join(seoDir, "sitemap.xml"), sitemapXml);
+const sitemapTxt = join(distDir, "sitemap.txt");
+await writeFile(sitemapTxt, sitemapXml);
 await copyFile(join(srcDir, "robots.txt"), join(distDir, "robots.txt"));
-await writeFile(join(distDir, "_redirects"), "/sitemap.xml  /seo/sitemap.xml  200!\n");
+await writeFile(
+  join(distDir, "_redirects"),
+  "/sitemap.xml   /sitemap.txt  200!\n/sitemap.xml/  /sitemap.txt  200!\n",
+);
 await writeFile(
   join(distDir, "_headers"),
   `/sitemap.xml
   Content-Type: application/xml; charset=UTF-8
   X-Content-Type-Options: nosniff
 
-/seo/sitemap.xml
+/sitemap.txt
   Content-Type: application/xml; charset=UTF-8
   X-Content-Type-Options: nosniff
 `,
@@ -459,7 +459,7 @@ try {
       "    lastmod = url.find('sm:lastmod', ns)\n" +
       "    if loc is None or not (loc.text or '').strip(): raise SystemExit('url missing loc')\n" +
       "    if lastmod is None or not (lastmod.text or '').strip(): raise SystemExit('url missing lastmod')\n",
-    sitemapFile,
+    sitemapTxt,
   ]);
 } catch (err) {
   if (err.code === "ENOENT") {
@@ -490,7 +490,7 @@ if (missing.length) {
 }
 
 console.log(`Built ${pages.length} pages → dist/`);
-console.log(`Sitemap: ${sitemapEntries.length} public URLs → dist/sitemap.xml`);
+console.log(`Sitemap: ${sitemapEntries.length} public URLs → dist/sitemap.txt (served at /sitemap.xml)`);
 console.log(`Robots: copied src/robots.txt → dist/robots.txt`);
 console.log(`Products: ${Object.keys(catalog.items).join(", ")}`);
 console.log(`Affiliate hops: ${affiliates.programs.map((p) => p.path).join(", ")}`);

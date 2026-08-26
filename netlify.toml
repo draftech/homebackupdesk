@@ -9,16 +9,25 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# Snippet injection / pretty-URL post-processing can 500 on sitemap.xml
-# (robots.txt is text/plain and is skipped). Serve files as published.
+# Snippet injection / pretty-URL post-processing can 500 on *.xml
+# (robots.txt is text/plain and is skipped). Do not run the HTML pipeline
+# at all, and do not publish a .xml file for the sitemap.
 [build.processing]
   skip_processing = true
+[build.processing.html]
+  pretty_urls = false
 
-# Static sitemap from dist/seo/sitemap.xml. force=true so this rewrite
-# wins over a splat 404 or any Netlify sitemap plugin on /sitemap.xml.
+# Serve sitemap from a .txt publish path so Netlify never XML-parses it.
+# Public URL stays /sitemap.xml via a forced 200 rewrite.
 [[redirects]]
   from = "/sitemap.xml"
-  to = "/seo/sitemap.xml"
+  to = "/sitemap.txt"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/sitemap.xml/"
+  to = "/sitemap.txt"
   status = 200
   force = true
 
@@ -69,7 +78,7 @@
     X-Content-Type-Options = "nosniff"
 
 [[headers]]
-  for = "/seo/sitemap.xml"
+  for = "/sitemap.txt"
   [headers.values]
     Content-Type = "application/xml; charset=UTF-8"
     X-Content-Type-Options = "nosniff"
