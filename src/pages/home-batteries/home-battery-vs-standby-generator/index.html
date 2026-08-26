@@ -1,6 +1,6 @@
 ---
 title: Home battery vs standby generator
-description: Expandable home battery kits versus automatic standby generators for home backup. Runtime, 240 V, install, noise, and who should buy which.
+description: Expandable home battery kits versus automatic standby generators: finite kWh vs fuel, noise, permits, 240 V, and winter. Anker SOLIX F3800 as the split-phase battery example. No Powerwall.
 silo: home-batteries
 crumb: Battery vs standby
 updated: 2026-08-26
@@ -8,33 +8,107 @@ sticky: home
 ---
 <article class="page-head">
   <p class="kicker">Vs · Batteries and generators</p>
-  <h1>A battery stores a tank of electricity. A standby generator makes a new tank from gas.</h1>
-  <p class="lede">That is the whole argument. Everything else — noise, permits, 240 V, winter storms — follows from it.</p>
+  <h1>A battery is a tank of electricity. A standby generator makes a new tank from gas while the fuel lasts.</h1>
+  <p class="lede">That is the physics. Noise, permits, 240 V, and winter storms are details that follow from it. Pick the physics that matches the outage you actually get.</p>
 </article>
+<p class="byline">Updated August 26, 2026 · The Home Backup</p>
+<nav class="toc" aria-label="On this page">
+  <p><strong>On this page</strong></p>
+  <ol>
+    <li>Finite kilowatt-hours versus fuel</li>
+    <li>Noise, exhaust, and neighbors</li>
+    <li>Permits and the house hook</li>
+    <li>240 V and what still will not start</li>
+    <li>Winter</li>
+    <li>Who should buy which</li>
+  </ol>
+</nav>
+<p>People cross-shop these products because both get sold as “home backup.” They are not substitutes. An expandable battery kit stores what you charged. An automatic standby generator converts propane or natural gas into watts for as long as the meter or tank cooperates. One is quiet and bounded. The other is loud and, if the fuel holds, long.</p>
+<p>On this site the battery side of the comparison is the Anker SOLIX F3800 plus the 120 V cores that grow (BLUETTI AC200L, Jackery Explorer 2000 Plus). The generator side is informational. Jackery, BLUETTI, and Anker SOLIX do not sell traditional pad plants. We will not invent a Generac click ID so a table looks more complete. Cost of the engine path: <a href="/whole-house-generators/cost/">whole-house generator cost</a>. Hub: <a href="/whole-house-generators/">whole-house generators</a>.</p>
 {{product:anker-solix-f3800}}
+<h2>Finite kilowatt-hours versus fuel</h2>
+<p>The F3800 ships with 3,840 Wh. Usable energy is less than nameplate; plan conservatively. A refrigerator that averages 150 W while cycling might take on the order of 1–2 kWh per day. A 1,500 W space heater takes that same pack down in a couple of hours of actual run time. Extra modules stretch the tank. They do not fill it from a gas pipe.</p>
+<p>A 10–12 kW air-cooled standby on natural gas is a different object. It can keep making watts overnight, in a blizzard, while you sleep, as long as the utility gas stays up and the unit exercises. Propane is the independent-fuel version of the same idea, with a tank gauge you own. Gasoline belongs on portables you stand next to, not on a plant you expect to start itself.</p>
+<p>Recharge is how a battery pretends to be a generator, badly. Wall AC is fast when the grid flickers back. <a href="/portable-solar-panels/">Portable folding panels</a> are weather. A 200 W folder in decent sun might return on the order of 0.6–1.2 kWh in a day, not nameplate times eight. Winter haze cuts that again. If your outage is a multi-day ice storm with no sun, the battery math fails unless you already bought a large stack and a tiny load list.</p>
 <div class="table-wrap" tabindex="0" role="region" aria-label="Home battery versus standby generator">
   <table>
-    <caption>Pick the physics that matches the outage</caption>
+    <caption>Physics first. Your house and AHJ still decide.</caption>
     <thead>
-      <tr><th></th><th>Expandable home battery kit</th><th>Automatic standby generator</th></tr>
+      <tr>
+        <th></th>
+        <th>Expandable home battery kit</th>
+        <th>Automatic standby generator</th>
+      </tr>
     </thead>
     <tbody>
-      <tr><th scope="row">Energy</th><td>Finite kWh, grow with modules, recharge from wall or <a href="/portable-solar-panels/">portable panels</a></td><td>As long as gas flows</td></tr>
-      <tr><th scope="row">Power</th><td>Inverter-limited; 240 V only on some SKUs</td><td>Sized in kW at the pad; natively whole-panel</td></tr>
-      <tr><th scope="row">Install</th><td>Optional inlet/ATS; can start as a plug-in box</td><td>Pad, gas, ATS, permit — a project</td></tr>
-      <tr><th scope="row">Noise / exhaust</th><td>Fans, no combustion</td><td>Engine; neighbors and CO clearances</td></tr>
-      <tr><th scope="row">Cost shape</th><td>High $/kWh, lower install if you stay portable</td><td>Lower $/kW, high install</td></tr>
-      <tr><th scope="row">Featured offers</th><td><a href="{{go:anker-solix}}">Anker SOLIX</a>, <a href="{{go:bluetti}}">Bluetti</a>, <a href="{{go:jackery}}">Jackery</a></td><td>None in this repo (no invented IDs)</td></tr>
+      <tr>
+        <th scope="row">Energy</th>
+        <td>Finite kWh. Grow with modules. Recharge from wall or portable panels.</td>
+        <td>As long as gas or propane flows.</td>
+      </tr>
+      <tr>
+        <th scope="row">Power</th>
+        <td>Inverter-limited. 240 V only on some SKUs. F3800: 6,000 W continuous, 9,000 W surge.</td>
+        <td>Sized in kW at the pad. Natively whole-panel with the right ATS.</td>
+      </tr>
+      <tr>
+        <th scope="row">Install</th>
+        <td>Can start as a plug-in box. House circuits need an inlet, interlock, or listed transfer switch.</td>
+        <td>Pad, gas line, ATS, permit — a construction project.</td>
+      </tr>
+      <tr>
+        <th scope="row">Noise / exhaust</th>
+        <td>Fans. No combustion. Indoor-adjacent use is the point, with ventilation sense.</td>
+        <td>Engine. Carbon monoxide clearances. Neighbors hear the weekly exercise.</td>
+      </tr>
+      <tr>
+        <th scope="row">Winter</th>
+        <td>Cold cuts solar recharge. Capacity is still a tank. Heat is an expensive load.</td>
+        <td>Fuel still makes watts at night. Starting and maintenance are the winter jobs.</td>
+      </tr>
+      <tr>
+        <th scope="row">Cost shape</th>
+        <td>High dollars per kilowatt-hour. Lower install if you stay portable. F3800 street $2,199.98 on August 26, 2026.</td>
+        <td>Lower dollars per kilowatt, high install. See <a href="/whole-house-generators/cost/">cost</a>.</td>
+      </tr>
+      <tr>
+        <th scope="row">Featured offers</th>
+        <td><a href="{{go:anker-solix}}">Anker SOLIX</a>, <a href="{{go:bluetti}}">BLUETTI</a>, <a href="{{go:jackery}}">Jackery</a></td>
+        <td>None in this repository. No invented generator affiliate IDs.</td>
+      </tr>
     </tbody>
   </table>
 </div>
+<h2>Noise, exhaust, and neighbors</h2>
+<p>Battery inverters make fan noise. That is not silence, but it is not a 3,600 RPM engine five feet from a bedroom window. You can sit in the same room as a station, which is why people buy them for CPAPs and routers. You cannot sit in the same room as a standby generator, and code will not let you try.</p>
+<p>Carbon monoxide is the portable-generator killer, not the battery killer. A pad plant still needs the distances to openings that your AHJ wrote down. Weekly exercise is how you learn whether the neighbors will live with the machine before the storm, not after. If an HOA already hates pad plants, a battery kit is not “the same backup, quieter.” It is a smaller, bounded backup that may be the only legal path on that lot.</p>
+<h2>Permits and the house hook</h2>
+<p>A station that only feeds extension cords is a consumer product. The moment you energize house circuits, you are in electrician territory. Inlet box plus interlock, or a listed transfer switch, is the legal pattern. A dryer-outlet cheat cord is how people burn down the service and injure lineworkers. We will keep saying that.</p>
+<p>A standby generator is a permit from day one: pad, gas, ATS, inspection. That is why <a href="/whole-house-generators/cost/">install often costs more than the unit</a>. The battery path can stay cheaper if you keep it portable. The battery path becomes a project the day you want the refrigerator circuit to live in the wall during an outage. Budget the electrician either way if the house wiring is the point.</p>
+<div class="note">
+  <p>The Home Backup is not your AHJ, gas fitter, or electrician. Local noise ordinances and HOA covenants kill otherwise sensible plants. Confirm live specs and code before you buy. This page is not electrical advice.</p>
+</div>
+<h2>240 V and what still will not start</h2>
+<p>Many wells, dryers, and air handlers are 240 V. A 120 V Explorer or AC200L, even stacked to 8 kWh, will not feed those loads. The F3800 is the named SKU on this desk that speaks 120/240 V: 6,000 W continuous, 9,000 W surge, 3,840 Wh, 132.3 lb, LFP. That surge number is on Anker’s page. It is still not a 4-ton heat pump’s locked-rotor amps in every house. Confirm the load. Locked-rotor is why electricians size generators in kilowatts and still add lockout kits.</p>
+<p>Central air, electric ranges, and tankless electric water are usually generator or “shed it” problems. A battery that can start a well may still empty itself keeping the well’s pressure tank happy plus a few lights. Voltage gets you in the door. Watt-hours decide how long you stay.</p>
+<h2>Winter</h2>
+<p>Ice storms are the honest test. Nights are long. Solar is weak. Space heat is the load people reach for and the load that ruins a battery plan. A standby on gas does not care that the driveway is glazed. A folding panel on that driveway does. If your region dies for three days at a time in January, and the house cannot lose heat, the engine is the tool. If your region dies for eight hours and you can close doors and wear a sweater, the battery is the tool.</p>
+<p>Cold also changes charging behavior and can change how a lithium pack wants to accept current. Follow the manufacturer’s temperature limits. Do not store a 132 lb cabinet in an unheated shed and expect nameplate in a polar snap. LiFePO4 / LFP is the chemistry we prefer for home-backup cycling; it is not magic insulation.</p>
+<ol class="steps">
+  <li><strong>List the outage you actually get</strong> — hours, overnight, or days — and whether HVAC is required.</li>
+  <li><strong>Separate 120 V and 240 V loads.</strong> If 240 V is required, the 120 V cores are the wrong aisle.</li>
+  <li><strong>Price the install, not just the box.</strong> Inlet versus pad-and-gas is the real fork.</li>
+  <li><strong>Plan recharge or fuel.</strong> Panels for the battery path; tank or meter for the engine path.</li>
+  <li><strong>Test once in daylight.</strong> Fridge start, interlock, and a labeled shed list.</li>
+</ol>
 <div class="who">
   <div>
     <h2>Buy the battery path when</h2>
     <ul>
       <li>Outages are hours to a couple of days and you can shed HVAC.</li>
-      <li>You need indoor-safe electronics backup as the core job.</li>
+      <li>Indoor-safe electronics backup is the core job: fridge, network, medical devices.</li>
       <li>You might roll the kit to a cabin or a different house later.</li>
+      <li>You will grow kWh with modules instead of pouring a pad this year.</li>
     </ul>
   </div>
   <div>
@@ -43,9 +117,18 @@ sticky: home
       <li>The house must behave like the grid for days, including heat pumps.</li>
       <li>You will not babysit recharge math during an ice storm.</li>
       <li>You have the install budget in <a href="/whole-house-generators/cost/">generator cost</a>.</li>
+      <li>Automatic transfer is the product, not a manual inlet.</li>
     </ul>
   </div>
 </div>
+<ul class="check">
+  <li>Finite kWh is not a moral failing. It is the product.</li>
+  <li>Fuel runtime is not free. You own maintenance, noise, and the pad.</li>
+  <li>Hybrids (battery plus a small gas unit, or battery plus panels) still obey surge and weather.</li>
+  <li>Rooftop-tied Powerwall-class systems are a third category. We will not sneak them in.</li>
+</ul>
 <div class="caveat">
-  <p>Hybrid answers exist (battery + small gas, or battery + portable panels). They still obey kWh and surge. Rooftop-tied Powerwall-class systems are a third category we will not sneak in.</p>
+  <h3>Honest caveats</h3>
+  <p>Featured battery CTAs are <a href="{{go:anker-solix}}">Anker SOLIX</a>, <a href="{{go:bluetti}}">BLUETTI</a>, and <a href="{{go:jackery}}">Jackery</a> only. EcoFlow is not featured (7-day cookie). We have not run a side-by-side winter lab on every SKU. Specs dated August 26, 2026. Kit shortlist: <a href="/home-batteries/best-expandable-home-batteries/">best expandable home batteries</a>. F3800 detail: <a href="/home-batteries/anker-solix-f3800/">F3800 review</a>.</p>
 </div>
+<p>Generator class notes: <a href="/whole-house-generators/best-standby-generators/">air-cooled vs liquid-cooled</a>. If you only need a fridge, skip both heavy paths and read <a href="/portable-power-stations/for-home-backup/">power stations for home backup</a>.</p>

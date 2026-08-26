@@ -161,7 +161,41 @@ main { width: 100%; }
   padding: 1.5rem 1.25rem 4.5rem;
 }
 
+.page > p,
+.page > ul,
+.page > ol,
+.page > h2,
+.page > h3,
+.page > .lede,
+.page > .kicker,
+.page > .byline,
+.page > .note,
+.page > .toc,
+.page > .caveat,
+.page > .who,
+.page > .steps,
+.page > .check,
+.page > .meta-line,
+.page > .source-note,
+.page > .related {
+  max-width: var(--measure);
+}
+
 .page-head { max-width: var(--measure); }
+
+.byline {
+  font-size: 0.9rem;
+  color: var(--mute);
+  margin: 0 0 1.35rem;
+}
+
+.related {
+  margin: 2.2rem 0 0;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+}
+
+.related ul { padding-left: 1.15rem; }
 
 .crumbs ol {
   list-style: none;

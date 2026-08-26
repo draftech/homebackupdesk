@@ -1,7 +1,7 @@
 {
   "name": "homebackupdesk",
   "private": true,
-  "description": "Home Backup Desk — static affiliate site for home backup power",
+  "description": "The Home Backup — static affiliate site for home backup power",
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",

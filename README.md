@@ -1,6 +1,6 @@
-# Home Backup Desk
+# The Home Backup
 
-Static affiliate site for **home backup power**. Four silos, buyer-intent pages, Netlify-ready. Working brand and domain: **homebackupdesk.com** (do not buy it from this repo).
+Static affiliate site for **home backup power**. Four silos, buyer-intent pages, Netlify-ready. Working brand and domain: **thehomebackup.com** (do not buy it from this repo). GitHub repo remains `draftech/homebackupdesk`.
 
 Named Jackery, BLUETTI, and Anker SOLIX SKUs use **official manufacturer product photographs** committed in `src/assets/products/` (sources in `src/products.json`). Lifestyle photos in `src/assets/photos/` are documentary scenes only — they never stand in for a product shot.
 
@@ -23,7 +23,7 @@ python3 -m http.server 8080 --directory dist
 
 There are no npm dependencies. `scripts/build.mjs` wraps `src/pages` in `src/templates/layout.html`, expands product cards from `src/products.json`, copies `src/assets`, writes `sitemap.xml` / `robots.txt`, and fails the build if an internal `href` is broken.
 
-Canonical URLs brand toward `https://homebackupdesk.com`. Until DNS exists, a Netlify default URL is the public host — update `src/site.json` `url` to the live origin after first deploy.
+Canonical URLs brand toward `https://thehomebackup.com`. Until DNS exists, a Netlify default URL is the public host — update `src/site.json` `url` to the live origin after first deploy.
 
 ## Netlify deploy
 
@@ -50,6 +50,7 @@ Until then, hops point at manufacturer homepages.
 ```
 /                                   Home
 /about/
+/contact/
 /how-we-review/
 /disclosure/
 /privacy/
@@ -64,17 +65,24 @@ Until then, hops point at manufacturer homepages.
 /home-batteries/best-expandable-home-batteries/
 /home-batteries/home-battery-vs-standby-generator/
 /home-batteries/buying-guide/
+/home-batteries/anker-solix-f3800/
 
 /portable-power-stations/           Silo 3 hub
 /portable-power-stations/best-portable-power-stations/
 /portable-power-stations/jackery-vs-bluetti-vs-anker-solix/
 /portable-power-stations/buying-guide/
 /portable-power-stations/for-home-backup/
+/portable-power-stations/jackery-explorer-2000-plus/
+/portable-power-stations/bluetti-ac200l/
+/portable-power-stations/anker-solix-c2000-gen2/
 
 /portable-solar-panels/             Silo 4 hub
 /portable-solar-panels/best-portable-solar-panels/
 /portable-solar-panels/folding-vs-briefcase/
 /portable-solar-panels/buying-guide/
+/portable-solar-panels/jackery-solarsaga-200w/
+/portable-solar-panels/bluetti-sp200l/
+/portable-solar-panels/anker-solix-ps400/
 
 /go/jackery/                        Placeholder affiliate hop
 /go/bluetti/
@@ -85,4 +93,4 @@ Standby-generator pages are informational. Jackery / BLUETTI / Anker SOLIX do no
 
 ## License
 
-Original copy in this repository is for Home Backup Desk. Manufacturer names are trademarks of their owners. Product photographs are downloaded from manufacturer sites for identification; rights remain with those manufacturers.
+Original copy in this repository is for The Home Backup. Manufacturer names are trademarks of their owners. Product photographs are downloaded from manufacturer sites for identification; rights remain with those manufacturers.
