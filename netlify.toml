@@ -9,6 +9,38 @@
 [build.environment]
   NODE_VERSION = "22"
 
+# Do not HTML-process publish files (pretty URLs / snippet injection).
+[build.processing]
+  skip_processing = true
+[build.processing.html]
+  pretty_urls = false
+
+[functions]
+  directory = "netlify/functions"
+
+# Edge function owns GET /sitemap.xml at the CDN (bypasses static XML 500s).
+[[edge_functions]]
+  function = "sitemap"
+  path = "/sitemap.xml"
+
+[[edge_functions]]
+  function = "sitemap"
+  path = "/sitemap.xml/"
+
+# Serverless fallback if edge is unavailable. force=true so a site-level
+# sitemap plugin or static *.xml pipeline cannot intercept the path.
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/serve-sitemap"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/sitemap.xml/"
+  to = "/.netlify/functions/serve-sitemap"
+  status = 200
+  force = true
+
 # Affiliate hops: swap `to` with real tracking URLs in this file (and src/affiliates.json).
 # Keep `from` slugs stable. 302 so you can change destinations later without caching 301s.
 [[redirects]]
@@ -47,10 +79,11 @@
   status = 302
   force = true
 
-[[redirects]]
-  from = "/*"
-  to = "/404.html"
-  status = 404
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=UTF-8"
+    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/*"
