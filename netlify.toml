@@ -9,25 +9,35 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# Snippet injection / pretty-URL post-processing can 500 on *.xml
-# (robots.txt is text/plain and is skipped). Do not run the HTML pipeline
-# at all, and do not publish a .xml file for the sitemap.
+# Do not HTML-process publish files (pretty URLs / snippet injection).
 [build.processing]
   skip_processing = true
 [build.processing.html]
   pretty_urls = false
 
-# Serve sitemap from a .txt publish path so Netlify never XML-parses it.
-# Public URL stays /sitemap.xml via a forced 200 rewrite.
+[functions]
+  directory = "netlify/functions"
+
+# Edge function owns GET /sitemap.xml at the CDN (bypasses static XML 500s).
+[[edge_functions]]
+  function = "sitemap"
+  path = "/sitemap.xml"
+
+[[edge_functions]]
+  function = "sitemap"
+  path = "/sitemap.xml/"
+
+# Serverless fallback if edge is unavailable. force=true so a site-level
+# sitemap plugin or static *.xml pipeline cannot intercept the path.
 [[redirects]]
   from = "/sitemap.xml"
-  to = "/sitemap.txt"
+  to = "/.netlify/functions/serve-sitemap"
   status = 200
   force = true
 
 [[redirects]]
   from = "/sitemap.xml/"
-  to = "/sitemap.txt"
+  to = "/.netlify/functions/serve-sitemap"
   status = 200
   force = true
 
@@ -68,20 +78,6 @@
   to = "https://www.ankersolix.com/"
   status = 302
   force = true
-
-# Unknown paths use dist/404.html automatically. Do not splat /* to 404 —
-# that rule can 500 /sitemap.xml when shadowing misses XML.
-[[headers]]
-  for = "/sitemap.xml"
-  [headers.values]
-    Content-Type = "application/xml; charset=UTF-8"
-    X-Content-Type-Options = "nosniff"
-
-[[headers]]
-  for = "/sitemap.txt"
-  [headers.values]
-    Content-Type = "application/xml; charset=UTF-8"
-    X-Content-Type-Options = "nosniff"
 
 [[headers]]
   for = "/robots.txt"

@@ -429,20 +429,44 @@ for (const entry of sitemapEntries) {
 const sitemapTxt = join(distDir, "sitemap.txt");
 await writeFile(sitemapTxt, sitemapXml);
 await copyFile(join(srcDir, "robots.txt"), join(distDir, "robots.txt"));
+
+const xmlLiteral = JSON.stringify(sitemapXml);
+const xmlHeaders = `{
+      "Content-Type": "application/xml; charset=UTF-8",
+      "Cache-Control": "public, max-age=0, must-revalidate",
+    }`;
+
+const edgeDir = join(root, "netlify/edge-functions");
+const fnDir = join(root, "netlify/functions");
+await mkdir(edgeDir, { recursive: true });
+await mkdir(fnDir, { recursive: true });
 await writeFile(
-  join(distDir, "_redirects"),
-  "/sitemap.xml   /sitemap.txt  200!\n/sitemap.xml/  /sitemap.txt  200!\n",
+  join(edgeDir, "sitemap.js"),
+  `export default async () => {
+  return new Response(${xmlLiteral}, {
+    status: 200,
+    headers: ${xmlHeaders},
+  });
+};
+
+export const config = { path: "/sitemap.xml" };
+`,
 );
 await writeFile(
-  join(distDir, "_headers"),
-  `/sitemap.xml
-  Content-Type: application/xml; charset=UTF-8
-  X-Content-Type-Options: nosniff
-
-/sitemap.txt
-  Content-Type: application/xml; charset=UTF-8
-  X-Content-Type-Options: nosniff
+  join(fnDir, "serve-sitemap.js"),
+  `export async function handler() {
+  return {
+    statusCode: 200,
+    headers: ${xmlHeaders},
+    body: ${xmlLiteral},
+  };
+}
 `,
+);
+
+await writeFile(
+  join(distDir, "_redirects"),
+  "/sitemap.xml   /.netlify/functions/serve-sitemap  200!\n/sitemap.xml/  /.netlify/functions/serve-sitemap  200!\n",
 );
 
 try {
@@ -490,7 +514,7 @@ if (missing.length) {
 }
 
 console.log(`Built ${pages.length} pages → dist/`);
-console.log(`Sitemap: ${sitemapEntries.length} public URLs → dist/sitemap.txt (served at /sitemap.xml)`);
+console.log(`Sitemap: ${sitemapEntries.length} public URLs → edge function /sitemap.xml`);
 console.log(`Robots: copied src/robots.txt → dist/robots.txt`);
 console.log(`Products: ${Object.keys(catalog.items).join(", ")}`);
 console.log(`Affiliate hops: ${affiliates.programs.map((p) => p.path).join(", ")}`);
